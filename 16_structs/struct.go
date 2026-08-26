@@ -5,11 +5,17 @@ import (
 	"time"
 )
 
+type customer struct {
+	name  string
+	phone int
+}
+
 type order struct {
 	id        string
 	amount    float32
 	status    string
 	createdAt time.Time // nanosecond precision
+	customer
 }
 
 // receiver type
@@ -63,9 +69,27 @@ func main() {
 	// direct decalare
 
 	lang := struct {
-		name string
+		name   string
 		isGood bool
 	}{"goland", true} // same order
 
 	fmt.Println(lang)
+
+	// struct embedding
+
+	// newCustomer := customer{
+	// 	name: "John",
+	// 	phone: 9999999999,
+	// }
+
+	newOrder := order{
+		id:     "4",
+		amount: 100,
+		status: "pending",
+		customer: customer{ // inline
+			name:  "John",
+			phone: 9999999999,
+		},
+	}
+	fmt.Println(newOrder)
 }
