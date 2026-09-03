@@ -31,5 +31,5 @@ go.work.sum
 # .idea/
 # .vscode/
 
-storage
+/26_rest_api/storage
 /26_rest_api/config
