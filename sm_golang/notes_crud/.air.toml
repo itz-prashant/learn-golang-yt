@@ -1,0 +1,13 @@
+root = "."
+tmp_dir = "tmp"
+
+
+[build]
+cmd = "go build -o ./temp/api.exe ./cmd/api"
+bin = "temp/api.exe"
+delay  = 3000
+exclude_dir = ["temp", "vendor"]
+exclude_regex = ["_test.go]
+
+[log]
+time = true
