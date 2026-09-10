@@ -25,7 +25,7 @@ func extractEnv(key string) (string, error) {
 
 func Load() (Config, error) {
 
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load("../../.env"); err != nil {
 		return Config{}, fmt.Errorf("Failed to load env")
 	}
 
