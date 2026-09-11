@@ -4,9 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/itz-prashant/notes-api/internal/notes"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
-func NewRouter() *gin.Engine {
+func NewRouter(database *mongo.Database) *gin.Engine {
 
 	r := gin.Default()
 
@@ -16,6 +18,8 @@ func NewRouter() *gin.Engine {
 			"status": "healthy",
 		})
 	})
+
+	notes.RegisterRoutes(r, database)
 
 	return r
 }
