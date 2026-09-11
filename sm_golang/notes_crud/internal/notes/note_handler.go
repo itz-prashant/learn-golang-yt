@@ -16,21 +16,21 @@ func NewHandler(repo *Repo) *Handler {
 	return &Handler{repo: repo}
 }
 
-func (h *Handler) CreateNote(c *gin.Context){
+func (h *Handler) CreateNote(c *gin.Context) {
 	var req CreateNoteRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error" : "Invalid Json",
+			"error": "Invalid Json",
 		})
 	}
 
 	now := time.Now().UTC()
 	note := Note{
-		ID: primitive.NewObjectID(),
-		Title: req.Title,
-		Content: req.Content,
-		Pinned: req.Pinned,
+		ID:        primitive.NewObjectID(),
+		Title:     req.Title,
+		Content:   req.Content,
+		Pinned:    req.Pinned,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -45,4 +45,18 @@ func (h *Handler) CreateNote(c *gin.Context){
 	}
 
 	c.JSON(http.StatusCreated, created)
+}
+
+func (h *Handler) ListNote(c *gin.Context) {
+	notes, err := h.repo.List(c.Request.Context())
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to fetch notes",
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"notes": notes,
+	})
 }

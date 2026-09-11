@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
@@ -33,4 +34,29 @@ func (r *Repo) Create(ctx context.Context, note Note) (Note, error) {
 	}
 
 	return note, nil
+}
+
+func (r *Repo) List(ctx context.Context) ([]Note, error) {
+
+	opCtx, cancel := context.WithTimeout(ctx, 5 * time.Second)
+	
+	defer cancel()
+
+	filter := bson.M{}
+
+	cursor, err := r.coll.Find(opCtx, filter)
+
+	if err != nil {
+		return nil, fmt.Errorf("Find note failed %w", err)
+	}
+
+	defer cursor.Close(opCtx) 
+
+	var notes []Note
+
+	if err := cursor.All(opCtx, &notes); err != nil {
+		return  nil, fmt.Errorf("Decode note failed", err)
+	}
+
+	return notes, nil
 }
